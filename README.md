@@ -148,7 +148,7 @@ fun handleEvent(event: Event) = when (event) {
 }
 ```
 
-## **QuizRepoImpl**
+## **QuizRepo**
 
 1. Reads questions from local JSON file in raw resources.
 2. Parses JSON using Kotlinx Serialization.
