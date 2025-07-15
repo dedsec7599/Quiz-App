@@ -70,6 +70,6 @@ dependencies {
     // For Dependency injection
     implementation(libs.koin.androidx.compose)
 
-
+    // For serialization
     implementation(libs.kotlinx.serialization.json)
 }

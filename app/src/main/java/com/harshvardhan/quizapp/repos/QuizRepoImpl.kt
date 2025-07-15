@@ -1,4 +1,4 @@
-package com.harshvardhan.quizapp.repos.quizRepo
+package com.harshvardhan.quizapp.repos
 
 import android.content.Context
 import com.harshvardhan.quizapp.dataModels.Question

@@ -1,7 +1,7 @@
 package com.harshvardhan.quizapp.usecases
 
 import com.harshvardhan.quizapp.dataModels.Question
-import com.harshvardhan.quizapp.repos.quizRepo.QuizRepo
+import com.harshvardhan.quizapp.repos.QuizRepo
 
 class GetQuestionsUseCase(
     private val dataRepo: QuizRepo

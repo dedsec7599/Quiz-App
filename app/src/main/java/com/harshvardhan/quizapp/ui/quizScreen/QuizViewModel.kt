@@ -9,6 +9,7 @@ import com.harshvardhan.quizapp.ui.quizScreen.QuizContract.State
 import com.harshvardhan.quizapp.ui.quizScreen.QuizContract.Event
 import com.harshvardhan.quizapp.usecases.CalculateStreakUseCase
 import com.harshvardhan.quizapp.usecases.GetQuestionsUseCase
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -62,6 +63,7 @@ class QuizViewModel(
                 setEffect { Effect.ShowError }
                 Log.e(TAG, e.message ?: "")
             } finally {
+                delay(1000)
                 setState { copy(isLoading = false) }
             }
         }
