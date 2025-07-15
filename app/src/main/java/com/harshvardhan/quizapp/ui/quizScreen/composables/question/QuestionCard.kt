@@ -33,8 +33,10 @@ import com.harshvardhan.quizapp.R
 import com.harshvardhan.quizapp.ui.quizScreen.QuizContract.*
 import com.harshvardhan.quizapp.ui.theme.CustomSpacing
 import com.harshvardhan.quizapp.ui.theme.StreakGold
+import com.harshvardhan.quizapp.utils.ContentDescription
 import com.harshvardhan.quizapp.utils.HorizontalSpacer
 import com.harshvardhan.quizapp.utils.VerticalSpacer
+import com.harshvardhan.quizapp.utils.accessibilityId
 import kotlinx.coroutines.delay
 
 @Composable
@@ -55,10 +57,13 @@ fun QuestionCard(
         modifier = Modifier
             .fillMaxSize()
             .padding(CustomSpacing.medium)
+            .accessibilityId(ContentDescription.QUESTION_CARD)
     ) {
         LinearProgressIndicator(
             progress = { (state.currentQuestionIndex + 1) / totalQuestions.toFloat() },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .accessibilityId(ContentDescription.PROGRESS_BAR),
             color = MaterialTheme.colorScheme.primary
         )
 
@@ -77,7 +82,8 @@ fun QuestionCard(
                     totalQuestions
                 ),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                modifier = Modifier.accessibilityId(ContentDescription.QUESTION_COUNTER)
             )
 
             // Streak indicator
@@ -93,7 +99,9 @@ fun QuestionCard(
                         imageVector = Icons.Default.Star,
                         contentDescription = stringResource(R.string.streak_badge),
                         tint = StreakGold,
-                        modifier = Modifier.size(CustomSpacing.xLarge)
+                        modifier = Modifier
+                            .size(CustomSpacing.xLarge)
+                            .accessibilityId(ContentDescription.STREAK_ICON)
                     )
                 }
 
@@ -105,7 +113,8 @@ fun QuestionCard(
                     color = if (state.currentStreak >= 3) StreakGold else MaterialTheme.colorScheme.onSurface.copy(
                         alpha = 0.7f
                     ),
-                    fontWeight = if (state.currentStreak >= 3) FontWeight.Bold else FontWeight.Normal
+                    fontWeight = if (state.currentStreak >= 3) FontWeight.Bold else FontWeight.Normal,
+                    modifier = Modifier.accessibilityId(ContentDescription.STREAK_TEXT)
                 )
             }
         }
@@ -114,16 +123,21 @@ fun QuestionCard(
 
         // Question card
         Card(
-            modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(
+            modifier = Modifier
+                .fillMaxWidth(),
+            colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
-            ), elevation = CardDefaults.cardElevation(defaultElevation = CustomSpacing.xxSmall)
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = CustomSpacing.xxSmall)
         ) {
             Text(
-                text = state.questions[state.currentQuestionIndex].question,
+                text = currentQuestion.question,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(CustomSpacing.xLarge)
+                modifier = Modifier
+                    .padding(CustomSpacing.xLarge)
+                    .accessibilityId(ContentDescription.QUESTION_TEXT)
             )
         }
 
@@ -131,12 +145,14 @@ fun QuestionCard(
 
         // Options
         currentQuestion.options.forEachIndexed { index, option ->
-            OptionCard(option = option,
+            OptionCard(
+                option = option,
                 index = index,
                 isSelected = state.selectedOptionIndex == index,
                 isCorrect = index == currentQuestion.correctOptionIndex,
                 isRevealed = state.isAnswerRevealed,
-                onClick = { onEventSent(Event.SelectOption(index)) })
+                onClick = { onEventSent(Event.SelectOption(index)) }
+            )
 
             VerticalSpacer(CustomSpacing.small)
         }
@@ -146,8 +162,10 @@ fun QuestionCard(
         // Skip button
         OutlinedButton(
             onClick = { onEventSent(Event.SkipQuestion) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = state.isAnswerRevealed.not()
+            modifier = Modifier
+                .fillMaxWidth()
+                .accessibilityId(ContentDescription.SKIP_BUTTON),
+            enabled = !state.isAnswerRevealed
         ) {
             Text(stringResource(R.string.skip_question))
         }

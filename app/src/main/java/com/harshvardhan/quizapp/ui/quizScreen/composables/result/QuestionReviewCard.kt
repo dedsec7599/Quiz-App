@@ -33,8 +33,10 @@ import com.harshvardhan.quizapp.dataModels.AnsweredQuestion
 import com.harshvardhan.quizapp.ui.theme.CorrectGreen
 import com.harshvardhan.quizapp.ui.theme.CustomSpacing
 import com.harshvardhan.quizapp.ui.theme.IncorrectRed
+import com.harshvardhan.quizapp.utils.ContentDescription
 import com.harshvardhan.quizapp.utils.HorizontalSpacer
 import com.harshvardhan.quizapp.utils.VerticalSpacer
+import com.harshvardhan.quizapp.utils.accessibilityId
 
 @Composable
 fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
@@ -49,7 +51,9 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
     )
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .accessibilityId(ContentDescription.REVIEW_CARD),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
         elevation = CardDefaults.cardElevation(defaultElevation = CustomSpacing.xxxSmall)
     ) {
@@ -61,7 +65,8 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                 text = answeredQuestion.question.question,
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Medium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.accessibilityId(ContentDescription.REVIEW_QUESTION_TEXT)
             )
 
             VerticalSpacer(CustomSpacing.small)
@@ -77,7 +82,8 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                             .background(
                                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
                                 shape = CircleShape
-                            ),
+                            )
+                            .accessibilityId(ContentDescription.SKIPPED_ICON),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -93,7 +99,8 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                     Text(
                         text = stringResource(R.string.question_skipped),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                        modifier = Modifier.accessibilityId(ContentDescription.SKIPPED_ANSWER_LABEL)
                     )
                 }
             } else {
@@ -106,12 +113,18 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                             .background(
                                 color = if (answeredQuestion.isCorrect) CorrectGreen else IncorrectRed,
                                 shape = CircleShape
+                            )
+                            .accessibilityId(
+                                if (answeredQuestion.isCorrect)
+                                    ContentDescription.CORRECT_ICON
+                                else
+                                    ContentDescription.INCORRECT_ICON
                             ),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = if (answeredQuestion.isCorrect) Icons.Default.Check else Icons.Default.Close,
-                            contentDescription = null,
+                            contentDescription = null, // already described by ID
                             tint = Color.White,
                             modifier = Modifier.size(CustomSpacing.small)
                         )
@@ -125,12 +138,13 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                             answeredQuestion.question.options[answeredQuestion.selectedOptionIndex!!]
                         ),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.accessibilityId(ContentDescription.USER_ANSWER_LABEL)
                     )
                 }
             }
 
-            // Correct answer
+            // Correct answer (if incorrect)
             if (!answeredQuestion.isCorrect) {
                 VerticalSpacer(CustomSpacing.xSmall)
 
@@ -143,7 +157,8 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                             .background(
                                 color = CorrectGreen,
                                 shape = CircleShape
-                            ),
+                            )
+                            .accessibilityId(ContentDescription.CORRECT_ICON),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -163,7 +178,8 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                         ),
                         style = MaterialTheme.typography.bodyMedium,
                         color = CorrectGreen,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        modifier = Modifier.accessibilityId(ContentDescription.CORRECT_ANSWER_LABEL)
                     )
                 }
             }

@@ -7,11 +7,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -33,6 +31,9 @@ import com.harshvardhan.quizapp.R
 import com.harshvardhan.quizapp.ui.theme.CorrectGreen
 import com.harshvardhan.quizapp.ui.theme.CustomSpacing
 import com.harshvardhan.quizapp.ui.theme.IncorrectRed
+import com.harshvardhan.quizapp.utils.ContentDescription
+import com.harshvardhan.quizapp.utils.HorizontalSpacer
+import com.harshvardhan.quizapp.utils.accessibilityId
 
 @Composable
 fun OptionCard(
@@ -68,7 +69,8 @@ fun OptionCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(enabled = !isRevealed) { onClick() },
+            .clickable(enabled = !isRevealed) { onClick() }
+            .accessibilityId(ContentDescription.OPTION_CARD_PREFIX + ('A' + index)),
         colors = CardDefaults.cardColors(containerColor = backgroundColor.value),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isSelected) CustomSpacing.xSmall else CustomSpacing.xxxSmall
@@ -99,31 +101,41 @@ fun OptionCard(
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                if (isRevealed && isCorrect) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = stringResource(R.string.correct),
-                        tint = Color.White,
-                        modifier = Modifier.size(CustomSpacing.medium)
-                    )
-                } else if (isRevealed && isSelected && !isCorrect) {
-                    Icon(
-                        imageVector = Icons.Default.Close,
-                        contentDescription = stringResource(R.string.incorrect),
-                        tint = Color.White,
-                        modifier = Modifier.size(CustomSpacing.medium)
-                    )
-                } else {
-                    Text(
-                        text = ('A' + index).toString(),
-                        color = if (isSelected && !isRevealed) Color.White else MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
-                    )
+                when {
+                    isRevealed && isCorrect -> {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = stringResource(R.string.correct),
+                            tint = Color.White,
+                            modifier = Modifier
+                                .size(CustomSpacing.medium)
+                                .accessibilityId(ContentDescription.CORRECT_ICON)
+                        )
+                    }
+
+                    isRevealed && isSelected && !isCorrect -> {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = stringResource(R.string.incorrect),
+                            tint = Color.White,
+                            modifier = Modifier
+                                .size(CustomSpacing.medium)
+                                .accessibilityId(ContentDescription.INCORRECT_ICON)
+                        )
+                    }
+
+                    else -> {
+                        Text(
+                            text = ('A' + index).toString(),
+                            color = if (isSelected && !isRevealed) Color.White else MaterialTheme.colorScheme.onSurface,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp
+                        )
+                    }
                 }
             }
 
-            Spacer(modifier = Modifier.width(CustomSpacing.medium))
+            HorizontalSpacer(CustomSpacing.medium)
 
             Text(
                 text = option,

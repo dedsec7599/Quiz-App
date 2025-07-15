@@ -46,6 +46,8 @@ import com.harshvardhan.quizapp.dataModels.QuizResult
 import com.harshvardhan.quizapp.ui.quizScreen.QuizContract.*
 import com.harshvardhan.quizapp.ui.theme.CustomSpacing
 import com.harshvardhan.quizapp.ui.theme.StreakGold
+import com.harshvardhan.quizapp.utils.ContentDescription
+import com.harshvardhan.quizapp.utils.accessibilityId
 import kotlinx.coroutines.delay
 
 @Composable
@@ -69,7 +71,8 @@ fun ResultsView(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(CustomSpacing.medium),
+            .padding(CustomSpacing.medium)
+            .accessibilityId(ContentDescription.RESULTS_VIEW),
         verticalArrangement = Arrangement.spacedBy(CustomSpacing.medium),
     ) {
         item {
@@ -77,12 +80,16 @@ fun ResultsView(
                 visible = isVisible, enter = fadeIn() + slideInVertically()
             ) {
                 Card(
-                    modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
-                    ), elevation = CardDefaults.cardElevation(defaultElevation = CustomSpacing.xSmall)
+                    ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = CustomSpacing.xSmall)
                 ) {
                     Column(
-                        modifier = Modifier.padding(CustomSpacing.xLarge).fillMaxWidth(),
+                        modifier = Modifier
+                            .padding(CustomSpacing.xLarge)
+                            .fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
@@ -90,23 +97,25 @@ fun ResultsView(
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.accessibilityId(ContentDescription.QUIZ_COMPLETED_HEADER)
                         )
 
                         Spacer(modifier = Modifier.height(CustomSpacing.medium))
 
-                        // Score display
                         Text(
                             text = "${result.correctAnswers}/${result.totalQuestions}",
                             style = MaterialTheme.typography.displayMedium,
                             fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.accessibilityId(ContentDescription.SCORE_DISPLAY)
                         )
 
                         Text(
                             text = stringResource(R.string.correct_answers),
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f)
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.8f),
+                            modifier = Modifier.accessibilityId(ContentDescription.CORRECT_ANSWERS_LABEL)
                         )
                     }
                 }
@@ -124,7 +133,10 @@ fun ResultsView(
                 ) {
                     // Streak card
                     Card(
-                        modifier = Modifier.weight(1f), colors = CardDefaults.cardColors(
+                        modifier = Modifier
+                            .weight(1f)
+                            .accessibilityId(ContentDescription.STREAK_CARD),
+                        colors = CardDefaults.cardColors(
                             containerColor = if (result.longestStreak >= 3) StreakGold.copy(alpha = 0.1f)
                             else MaterialTheme.colorScheme.surface
                         )
@@ -144,6 +156,7 @@ fun ResultsView(
                                         modifier = Modifier
                                             .size(CustomSpacing.xLarge)
                                             .graphicsLayer(rotationZ = starRotation)
+                                            .accessibilityId(ContentDescription.STREAK_ICON)
                                     )
                                     Spacer(modifier = Modifier.width(CustomSpacing.xxSmall))
                                 }
@@ -152,21 +165,26 @@ fun ResultsView(
                                     text = "${result.longestStreak}",
                                     style = MaterialTheme.typography.headlineLarge,
                                     fontWeight = FontWeight.Bold,
-                                    color = if (result.longestStreak >= 3) StreakGold else MaterialTheme.colorScheme.primary
+                                    color = if (result.longestStreak >= 3) StreakGold else MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.accessibilityId(ContentDescription.STREAK_VALUE)
                                 )
                             }
 
                             Text(
                                 text = stringResource(R.string.best_streak),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                                modifier = Modifier.accessibilityId(ContentDescription.STREAK_LABEL)
                             )
                         }
                     }
 
                     // Skipped card
                     Card(
-                        modifier = Modifier.weight(1f), colors = CardDefaults.cardColors(
+                        modifier = Modifier
+                            .weight(1f)
+                            .accessibilityId(ContentDescription.SKIPPED_CARD),
+                        colors = CardDefaults.cardColors(
                             containerColor = MaterialTheme.colorScheme.surface
                         )
                     ) {
@@ -178,13 +196,15 @@ fun ResultsView(
                                 text = "${result.skippedQuestions}",
                                 style = MaterialTheme.typography.headlineLarge,
                                 fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.accessibilityId(ContentDescription.SKIPPED_VALUE)
                             )
 
                             Text(
                                 text = stringResource(R.string.skipped),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                                modifier = Modifier.accessibilityId(ContentDescription.SKIPPED_LABEL)
                             )
                         }
                     }
@@ -201,7 +221,9 @@ fun ResultsView(
                     text = stringResource(R.string.question_review),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(vertical = CustomSpacing.xSmall)
+                    modifier = Modifier
+                        .padding(vertical = CustomSpacing.xSmall)
+                        .accessibilityId(ContentDescription.QUESTION_REVIEW_HEADER)
                 )
             }
         }
@@ -226,7 +248,9 @@ fun ResultsView(
                 ) {
                     Button(
                         onClick = { onEventSent(Event.RestartQuiz) },
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .accessibilityId(ContentDescription.RESTART_BUTTON)
                     ) {
                         Text(stringResource(R.string.restart_quiz))
                     }
