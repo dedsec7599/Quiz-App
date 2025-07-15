@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -28,11 +27,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.harshvardhan.quizapp.R
 import com.harshvardhan.quizapp.dataModels.AnsweredQuestion
 import com.harshvardhan.quizapp.ui.theme.CorrectGreen
+import com.harshvardhan.quizapp.ui.theme.CustomSpacing
 import com.harshvardhan.quizapp.ui.theme.IncorrectRed
 import com.harshvardhan.quizapp.utils.HorizontalSpacer
 import com.harshvardhan.quizapp.utils.VerticalSpacer
@@ -52,10 +51,10 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = backgroundColor),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = CustomSpacing.xxxSmall)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(CustomSpacing.medium)
         ) {
             // Question
             Text(
@@ -65,7 +64,7 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            VerticalSpacer(12.dp)
+            VerticalSpacer(CustomSpacing.small)
 
             // User answer
             if (answeredQuestion.isSkipped) {
@@ -74,7 +73,7 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(CustomSpacing.xLarge)
                             .background(
                                 color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
                                 shape = CircleShape
@@ -89,7 +88,7 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                         )
                     }
 
-                    HorizontalSpacer(8.dp)
+                    HorizontalSpacer(CustomSpacing.xSmall)
 
                     Text(
                         text = stringResource(R.string.question_skipped),
@@ -103,7 +102,7 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(CustomSpacing.xLarge)
                             .background(
                                 color = if (answeredQuestion.isCorrect) CorrectGreen else IncorrectRed,
                                 shape = CircleShape
@@ -114,11 +113,11 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                             imageVector = if (answeredQuestion.isCorrect) Icons.Default.Check else Icons.Default.Close,
                             contentDescription = null,
                             tint = Color.White,
-                            modifier = Modifier.size(12.dp)
+                            modifier = Modifier.size(CustomSpacing.small)
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(CustomSpacing.xSmall))
 
                     Text(
                         text = stringResource(
@@ -133,14 +132,14 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
 
             // Correct answer
             if (!answeredQuestion.isCorrect) {
-                VerticalSpacer(8.dp)
+                VerticalSpacer(CustomSpacing.xSmall)
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(CustomSpacing.xLarge)
                             .background(
                                 color = CorrectGreen,
                                 shape = CircleShape
@@ -151,11 +150,11 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                             imageVector = Icons.Default.Check,
                             contentDescription = null,
                             tint = Color.White,
-                            modifier = Modifier.size(12.dp)
+                            modifier = Modifier.size(CustomSpacing.small)
                         )
                     }
 
-                    HorizontalSpacer(8.dp)
+                    HorizontalSpacer(CustomSpacing.xSmall)
 
                     Text(
                         text = stringResource(

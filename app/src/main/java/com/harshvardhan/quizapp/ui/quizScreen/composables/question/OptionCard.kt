@@ -28,10 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.harshvardhan.quizapp.R
 import com.harshvardhan.quizapp.ui.theme.CorrectGreen
+import com.harshvardhan.quizapp.ui.theme.CustomSpacing
 import com.harshvardhan.quizapp.ui.theme.IncorrectRed
 
 @Composable
@@ -71,23 +71,23 @@ fun OptionCard(
             .clickable(enabled = !isRevealed) { onClick() },
         colors = CardDefaults.cardColors(containerColor = backgroundColor.value),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = if (isSelected) 8.dp else 2.dp
+            defaultElevation = if (isSelected) CustomSpacing.xSmall else CustomSpacing.xxxSmall
         )
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
-                    width = 2.dp,
+                    width = CustomSpacing.xxxSmall,
                     color = borderColor.value,
-                    shape = RoundedCornerShape(8.dp)
+                    shape = RoundedCornerShape(CustomSpacing.xSmall)
                 )
-                .padding(16.dp),
+                .padding(CustomSpacing.medium),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
-                    .size(32.dp)
+                    .size(CustomSpacing.huge)
                     .background(
                         color = when {
                             isRevealed && isCorrect -> CorrectGreen
@@ -104,14 +104,14 @@ fun OptionCard(
                         imageVector = Icons.Default.Check,
                         contentDescription = stringResource(R.string.correct),
                         tint = Color.White,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(CustomSpacing.medium)
                     )
                 } else if (isRevealed && isSelected && !isCorrect) {
                     Icon(
                         imageVector = Icons.Default.Close,
                         contentDescription = stringResource(R.string.incorrect),
                         tint = Color.White,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(CustomSpacing.medium)
                     )
                 } else {
                     Text(
@@ -123,7 +123,7 @@ fun OptionCard(
                 }
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(CustomSpacing.medium))
 
             Text(
                 text = option,

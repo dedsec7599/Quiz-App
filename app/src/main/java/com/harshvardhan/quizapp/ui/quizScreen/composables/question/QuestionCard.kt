@@ -29,9 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.harshvardhan.quizapp.R
 import com.harshvardhan.quizapp.ui.quizScreen.QuizContract.*
+import com.harshvardhan.quizapp.ui.theme.CustomSpacing
 import com.harshvardhan.quizapp.ui.theme.StreakGold
 import com.harshvardhan.quizapp.utils.HorizontalSpacer
 import com.harshvardhan.quizapp.utils.VerticalSpacer
@@ -54,7 +54,7 @@ fun QuestionCard(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(CustomSpacing.medium)
     ) {
         LinearProgressIndicator(
             progress = { (state.currentQuestionIndex + 1) / totalQuestions.toFloat() },
@@ -62,7 +62,7 @@ fun QuestionCard(
             color = MaterialTheme.colorScheme.primary
         )
 
-        VerticalSpacer(16.dp)
+        VerticalSpacer(CustomSpacing.medium)
 
         // Question counter and streak
         Row(
@@ -93,11 +93,11 @@ fun QuestionCard(
                         imageVector = Icons.Default.Star,
                         contentDescription = stringResource(R.string.streak_badge),
                         tint = StreakGold,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(CustomSpacing.xLarge)
                     )
                 }
 
-                HorizontalSpacer(4.dp)
+                HorizontalSpacer(CustomSpacing.xxSmall)
 
                 Text(
                     text = "Streak: ${state.currentStreak}",
@@ -110,24 +110,24 @@ fun QuestionCard(
             }
         }
 
-        VerticalSpacer(32.dp)
+        VerticalSpacer(CustomSpacing.huge)
 
         // Question card
         Card(
             modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
-            ), elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            ), elevation = CardDefaults.cardElevation(defaultElevation = CustomSpacing.xxSmall)
         ) {
             Text(
                 text = state.questions[state.currentQuestionIndex].question,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(24.dp)
+                modifier = Modifier.padding(CustomSpacing.xLarge)
             )
         }
 
-        VerticalSpacer(32.dp)
+        VerticalSpacer(CustomSpacing.huge)
 
         // Options
         currentQuestion.options.forEachIndexed { index, option ->
@@ -138,7 +138,7 @@ fun QuestionCard(
                 isRevealed = state.isAnswerRevealed,
                 onClick = { onEventSent(Event.SelectOption(index)) })
 
-            VerticalSpacer(12.dp)
+            VerticalSpacer(CustomSpacing.small)
         }
 
         Spacer(modifier = Modifier.weight(1f))

@@ -41,10 +41,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.harshvardhan.quizapp.R
 import com.harshvardhan.quizapp.dataModels.QuizResult
 import com.harshvardhan.quizapp.ui.quizScreen.QuizContract.*
+import com.harshvardhan.quizapp.ui.theme.CustomSpacing
 import com.harshvardhan.quizapp.ui.theme.StreakGold
 import kotlinx.coroutines.delay
 
@@ -69,8 +69,8 @@ fun ResultsView(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+            .padding(CustomSpacing.medium),
+        verticalArrangement = Arrangement.spacedBy(CustomSpacing.medium),
     ) {
         item {
             AnimatedVisibility(
@@ -79,10 +79,10 @@ fun ResultsView(
                 Card(
                     modifier = Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
-                    ), elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                    ), elevation = CardDefaults.cardElevation(defaultElevation = CustomSpacing.xSmall)
                 ) {
                     Column(
-                        modifier = Modifier.padding(24.dp).fillMaxWidth(),
+                        modifier = Modifier.padding(CustomSpacing.xLarge).fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
@@ -93,7 +93,7 @@ fun ResultsView(
                             color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(CustomSpacing.medium))
 
                         // Score display
                         Text(
@@ -120,7 +120,7 @@ fun ResultsView(
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    horizontalArrangement = Arrangement.spacedBy(CustomSpacing.small)
                 ) {
                     // Streak card
                     Card(
@@ -130,7 +130,7 @@ fun ResultsView(
                         )
                     ) {
                         Column(
-                            modifier = Modifier.padding(16.dp),
+                            modifier = Modifier.padding(CustomSpacing.medium),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Row(
@@ -142,10 +142,10 @@ fun ResultsView(
                                         contentDescription = null,
                                         tint = StreakGold,
                                         modifier = Modifier
-                                            .size(24.dp)
+                                            .size(CustomSpacing.xLarge)
                                             .graphicsLayer(rotationZ = starRotation)
                                     )
-                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Spacer(modifier = Modifier.width(CustomSpacing.xxSmall))
                                 }
 
                                 Text(
@@ -171,7 +171,7 @@ fun ResultsView(
                         )
                     ) {
                         Column(
-                            modifier = Modifier.padding(16.dp),
+                            modifier = Modifier.padding(CustomSpacing.medium),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Text(
@@ -201,7 +201,7 @@ fun ResultsView(
                     text = stringResource(R.string.question_review),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                    modifier = Modifier.padding(vertical = CustomSpacing.xSmall)
                 )
             }
         }
@@ -222,7 +222,7 @@ fun ResultsView(
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                    verticalArrangement = Arrangement.spacedBy(CustomSpacing.small)
                 ) {
                     Button(
                         onClick = { onEventSent(Event.RestartQuiz) },
