@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Quiz App</string>
+    <string name="correct">Correct</string>
+    <string name="incorrect">Incorrect</string>
+    <string name="skip_question">Skip Question</string>
+    <string name="streak_badge">Streak badge</string>
+    <string name="question_of">Question %1$s of %2$s</string>
+    <string name="question_skipped">Question skipped</string>
+    <string name="your_answer">Your answer: %1$s</string>
+    <string name="correct_answer">Correct: %1$s</string>
+    <string name="question_mark">\?</string>
+    <string name="quiz_completed">🎉 Quiz Completed! 🎉</string>
+    <string name="correct_answers">Correct Answers</string>
+    <string name="best_streak">Best Streak</string>
+    <string name="skipped">Skipped</string>
+    <string name="question_review">Question Review</string>
+    <string name="restart_quiz">Restart Quiz</string>
+    <string name="quiz_app">Quiz App</string>
+    <string name="loading_questions">Loading questions...</string>
+    <string name="something_went_wrong">Something went wrong</string>
+</resources>
