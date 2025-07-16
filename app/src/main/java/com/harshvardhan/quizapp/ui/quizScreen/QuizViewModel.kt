@@ -21,7 +21,7 @@ class QuizViewModel(
     val getQuestionsUseCase: GetQuestionsUseCase,
     val calculateStreakUseCase: CalculateStreakUseCase,
 ) : ViewModel() {
-    private val TAG = "CounterViewModel"
+    private val TAG = "QuizViewModel"
 
     private val _state = MutableStateFlow(State())
     val state = _state.asStateFlow()
