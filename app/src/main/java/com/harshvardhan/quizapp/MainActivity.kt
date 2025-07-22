@@ -18,6 +18,8 @@ import com.harshvardhan.quizapp.ui.quizScreen.QuizViewModel
 import com.harshvardhan.quizapp.ui.quizScreen.composables.QuizScreen
 import com.harshvardhan.quizapp.ui.theme.QuizAppTheme
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.compose.viewmodel.koinViewModel
 import kotlin.getValue
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +27,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val viewmodel: QuizViewModel by inject()
+        val viewmodel: QuizViewModel by viewModel()
 
         setContent {
             val state by viewmodel.state.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
