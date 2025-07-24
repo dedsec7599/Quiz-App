@@ -9,8 +9,8 @@ sealed class QuizContract {
         data class SelectOption(val optionIndex: Int) : Event()
         object SkipQuestion : Event()
         object NextQuestion : Event()
-        object RestartQuiz : Event()
         data class FetchQuestions(val topic: Topic): Event()
+        data class ShowReview(val topic: Topic): Event()
         object OnBackPress: Event()
     }
 
@@ -28,7 +28,8 @@ sealed class QuizContract {
         val answeredQuestions: List<AnsweredQuestion> = emptyList(),
         val currentStreak: Int = 0,
         val longestStreak: Int = 0,
-        val isQuizCompleted: Boolean = false
+        val isQuizCompleted: Boolean = false,
+        val showReview: Boolean = false
     )
 
     sealed class Effect {

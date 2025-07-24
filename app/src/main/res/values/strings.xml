@@ -14,9 +14,10 @@
     <string name="best_streak">Best Streak</string>
     <string name="skipped">Skipped</string>
     <string name="question_review">Question Review</string>
-    <string name="restart_quiz">Restart Quiz</string>
+    <string name="finish">Finish</string>
     <string name="quiz_app">Quiz App</string>
-    <string name="loading_questions">Loading questions...</string>
+    <string name="loading_questions">Loading questions…</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="quiz_topics">Quiz topics</string>
+    <string name="review">Review</string>
 </resources>

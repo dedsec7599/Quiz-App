@@ -16,7 +16,8 @@ data class TopicEntity(
     val title: String,
     val description: String,
     @ColumnInfo(name = "questions_url") val url: String,
-    @ColumnInfo(name = "is_completed") val isCompleted: Boolean = false
+    @ColumnInfo(name = "is_completed") val isCompleted: Boolean = false,
+    @ColumnInfo(name = "best_streak") val bestStreak: Int = 0
 )
 
 @Dao
@@ -34,8 +35,8 @@ interface TopicDao {
     suspend fun insertTopics(topics: List<TopicEntity>)
 
     // Mark topic as completed
-    @Query("UPDATE topics SET is_completed = 1 WHERE id = :topicId")
-    suspend fun markTopicCompleted(topicId: String)
+    @Query("UPDATE topics SET is_completed = 1, best_streak = :bestStreak WHERE id = :topicId")
+    suspend fun markTopicCompleted(topicId: String, bestStreak: Int)
 
     // Delete topics that are not in the provided list (for sync)
     @Query("DELETE FROM topics WHERE id NOT IN (:topicIds)")

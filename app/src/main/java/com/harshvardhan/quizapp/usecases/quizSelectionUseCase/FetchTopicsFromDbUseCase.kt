@@ -1,4 +1,4 @@
-package com.harshvardhan.quizapp.usecases.dbUseCase
+package com.harshvardhan.quizapp.usecases.quizSelectionUseCase
 
 import com.harshvardhan.quizapp.database.topics.TopicEntity
 import com.harshvardhan.quizapp.repos.QuizDBRepo

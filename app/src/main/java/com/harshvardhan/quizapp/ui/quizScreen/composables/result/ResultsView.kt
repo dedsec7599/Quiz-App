@@ -52,7 +52,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun ResultsView(
-    result: QuizResult, onEventSent: (Event) -> Unit
+    result: QuizResult, showReview: Boolean, onEventSent: (Event) -> Unit
 ) {
     var isVisible by remember { mutableStateOf(false) }
 
@@ -93,7 +93,7 @@ fun ResultsView(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            text = stringResource(R.string.quiz_completed),
+                            text = if(showReview) "Review your answers" else stringResource(R.string.quiz_completed),
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
@@ -247,12 +247,12 @@ fun ResultsView(
                     verticalArrangement = Arrangement.spacedBy(CustomSpacing.small)
                 ) {
                     Button(
-                        onClick = { onEventSent(Event.RestartQuiz) },
+                        onClick = { onEventSent(Event.OnBackPress) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .accessibilityId(ContentDescription.RESTART_BUTTON)
+                            .accessibilityId(ContentDescription.FINISH_QUIZ)
                     ) {
-                        Text(stringResource(R.string.restart_quiz))
+                        Text(stringResource(R.string.finish))
                     }
                 }
             }

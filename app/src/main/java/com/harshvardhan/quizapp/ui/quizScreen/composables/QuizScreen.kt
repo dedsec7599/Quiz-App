@@ -64,6 +64,7 @@ fun QuizScreen(
 
                 ResultsView(
                     result = result,
+                    showReview = state.showReview,
                     onEventSent = onEvent
                 )
             }

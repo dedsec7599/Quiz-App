@@ -11,7 +11,8 @@ interface QuizDBRepo {
     suspend fun completeTopicAndSaveQuestions(
         topicId: String,
         questions: List<Question>,
-        userAnswers: Map<Int, String> // questionId to userAnswer mapping
+        userAnswers: Map<Int, String>, // questionId to userAnswer mapping
+        bestStreak: Int
     )
     suspend fun getAllQuestionsForTopic(topicId: String): List<QuestionEntity>
 }

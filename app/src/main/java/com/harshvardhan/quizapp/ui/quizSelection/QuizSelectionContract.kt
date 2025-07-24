@@ -5,6 +5,7 @@ import com.harshvardhan.quizapp.dataModels.Topic
 sealed class QuizSelectionContract {
     sealed class Event {
         data class OnTopicSelected(val topic: Topic): Event()
+        data class OnReviewClicked(val topic: Topic): Event()
 
         data object UpdateTopicStatus: Event()
         data object OnBackPress: Event()
@@ -30,7 +31,7 @@ sealed class QuizSelectionContract {
 
     sealed class Effect {
         sealed class Navigation: Effect() {
-            data class NavigateToQuiz(val topic: Topic): Navigation()
+            data class NavigateToQuiz(val topic: Topic, val isReviewing: Boolean): Navigation()
             data object OnBackPress: Navigation()
         }
         data object ShowError : Effect()

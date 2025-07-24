@@ -56,11 +56,13 @@ class MainActivity : ComponentActivity() {
                                                 id = it.topic.id,
                                                 title = it.topic.title,
                                                 description = it.topic.description,
-                                                url = it.topic.url
+                                                url = it.topic.url,
+                                                showReview = it.isReviewing,
+                                                bestStreak = it.topic.bestStreak
                                             )
                                         )
 
-                                        Effect.Navigation.OnBackPress -> navController.navigateUp()
+                                        Effect.Navigation.OnBackPress -> finish()
                                     }
                                 })
                         }
@@ -77,24 +79,27 @@ class MainActivity : ComponentActivity() {
                                 id = arguments.id,
                                 title = arguments.title,
                                 description = arguments.description,
-                                url = arguments.url
+                                url = arguments.url,
+                                bestStreak = arguments.bestStreak
                             )
 
                             LaunchedEffect(Unit) {
-                                viewModel.handleEvent(QuizContract.Event.FetchQuestions(topic))
+                                if (arguments.showReview) viewModel.handleEvent(
+                                    QuizContract.Event.ShowReview(
+                                        topic
+                                    )
+                                ) else viewModel.handleEvent(QuizContract.Event.FetchQuestions(topic))
                             }
 
-                            QuizScreen(
-                                modifier = Modifier.padding(paddingValues),
+                            QuizScreen(modifier = Modifier.padding(paddingValues),
                                 state = state,
                                 onEvent = viewModel::handleEvent,
                                 onEffectSent = viewModel.effect,
                                 onNavigationRequested = {
-                                    when(it) {
+                                    when (it) {
                                         QuizContract.Effect.Navigation.OnBackPress -> navController.navigateUp()
                                     }
-                                }
-                            )
+                                })
                         }
                     }
 

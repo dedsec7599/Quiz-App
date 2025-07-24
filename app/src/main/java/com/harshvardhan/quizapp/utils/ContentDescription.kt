@@ -29,5 +29,5 @@ object ContentDescription {
     const val SKIPPED_VALUE = "skipped_value"
     const val SKIPPED_LABEL = "skipped_label"
     const val QUESTION_REVIEW_HEADER = "question_review_header"
-    const val RESTART_BUTTON = "restart_button"
+    const val FINISH_QUIZ = "finish_quiz"
 }

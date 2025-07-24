@@ -9,5 +9,6 @@ data class Topic(
     val title: String = "",
     val description: String = "",
     @SerialName("questions_url") val url: String = "",
-    val isFinished: Boolean = false
+    val isFinished: Boolean = false,
+    val bestStreak: Int = 0
 )

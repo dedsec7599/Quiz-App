@@ -21,10 +21,11 @@ class QuizDBRepoImpl(database: QuizDatabase) : QuizDBRepo {
     override suspend fun completeTopicAndSaveQuestions(
         topicId: String,
         questions: List<Question>,
-        userAnswers: Map<Int, String> // questionId to userAnswer mapping
+        userAnswers: Map<Int, String>, // questionId to userAnswer mapping
+        bestStreak: Int
     ) {
         // Mark topic as completed
-        topicDao.markTopicCompleted(topicId)
+        topicDao.markTopicCompleted(topicId, bestStreak)
 
         // Delete old questions for this topic to avoid stale data
         questionDao.deleteQuestionsByTopic(topicId)
@@ -41,7 +42,7 @@ class QuizDBRepoImpl(database: QuizDatabase) : QuizDBRepo {
             )
         }
         questionDao.insertQuestions(questionEntities)
-    } 
+    }
 
     // Get all questions for a topic (with user answers)
     override suspend fun getAllQuestionsForTopic(topicId: String): List<QuestionEntity> {

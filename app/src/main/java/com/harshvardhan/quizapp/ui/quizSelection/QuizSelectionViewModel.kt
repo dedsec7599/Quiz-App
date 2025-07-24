@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.harshvardhan.quizapp.dataModels.Topic
 import com.harshvardhan.quizapp.ui.quizSelection.QuizSelectionContract.*
 import com.harshvardhan.quizapp.ui.quizSelection.QuizSelectionContract.Effect.Navigation.NavigateToQuiz
-import com.harshvardhan.quizapp.usecases.dbUseCase.FetchTopicsFromDbUseCase
-import com.harshvardhan.quizapp.usecases.dbUseCase.SyncDbTopicsUseCase
+import com.harshvardhan.quizapp.usecases.quizSelectionUseCase.FetchTopicsFromDbUseCase
 import com.harshvardhan.quizapp.usecases.quizSelectionUseCase.GetTopicsUseCase
+import com.harshvardhan.quizapp.usecases.quizSelectionUseCase.SyncDbTopicsUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -36,13 +36,18 @@ class QuizSelectionViewModel(
     fun handleEvent(event: Event) {
         when(event) {
             is Event.OnTopicSelected -> {
-                setEffect { NavigateToQuiz(event.topic) }
+                setEffect { NavigateToQuiz(event.topic, false) }
             }
 
             Event.UpdateTopicStatus -> {
                 viewModelScope.launch {
                     loadTopicsFromDb()
                 }
+            }
+
+            is Event.OnReviewClicked -> {
+                val bestStreak = state.value.topics
+                setEffect { NavigateToQuiz(event.topic, true) }
             }
 
             Event.OnBackPress -> setEffect { Effect.Navigation.OnBackPress }
@@ -99,7 +104,8 @@ class QuizSelectionViewModel(
                 title = entity.title,
                 description = entity.description,
                 url = entity.url,
-                isFinished = entity.isCompleted
+                isFinished = entity.isCompleted,
+                bestStreak = entity.bestStreak
             )
         }
         setState { copy(topics = mappedTopics) }

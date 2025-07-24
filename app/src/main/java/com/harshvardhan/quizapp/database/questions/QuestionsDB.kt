@@ -12,13 +12,12 @@ import com.harshvardhan.quizapp.database.topics.TopicEntity
 
 @Entity(
     tableName = "questions",
-    primaryKeys = ["id", "topic_id"], // Declare composite PK here
+    primaryKeys = ["id", "topic_id"],
     foreignKeys = [
         ForeignKey(
             entity = TopicEntity::class,
             parentColumns = ["id"],
             childColumns = ["topic_id"],
-            onDelete = ForeignKey.CASCADE
         )
     ],
     indices = [Index(value = ["topic_id"])]
