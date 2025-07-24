@@ -18,4 +18,5 @@
     <string name="quiz_app">Quiz App</string>
     <string name="loading_questions">Loading questions...</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="quiz_topics">Quiz topics</string>
 </resources>

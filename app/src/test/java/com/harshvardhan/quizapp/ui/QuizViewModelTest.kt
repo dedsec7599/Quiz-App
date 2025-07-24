@@ -1,13 +1,12 @@
 package com.harshvardhan.quizapp.ui
 
-import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.*
 import com.harshvardhan.quizapp.dataModels.Question
 import com.harshvardhan.quizapp.ui.quizScreen.QuizContract
 import com.harshvardhan.quizapp.ui.quizScreen.QuizViewModel
-import com.harshvardhan.quizapp.usecases.CalculateStreakUseCase
-import com.harshvardhan.quizapp.usecases.GetQuestionsUseCase
+import com.harshvardhan.quizapp.usecases.quizUseCase.CalculateStreakUseCase
+import com.harshvardhan.quizapp.usecases.quizUseCase.GetQuestionsUseCase
 import io.mockk.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -54,7 +53,7 @@ class QuizViewModelTest {
     @Test
     fun `initial state should be correct`() = runTest {
         // Given
-        coEvery { mockGetQuestionsUseCase() } returns Result.success(sampleQuestions)
+        coEvery { mockGetQuestionsUseCase(currentState.currentTopic.url, dataRepo) } returns Result.success(sampleQuestions)
 
         // When
         viewModel = QuizViewModel(mockGetQuestionsUseCase, mockCalculateStreakUseCase)
@@ -76,7 +75,7 @@ class QuizViewModelTest {
     @Test
     fun `selectOption should update state correctly`() = runTest {
         // Given
-        coEvery { mockGetQuestionsUseCase() } returns Result.success(sampleQuestions)
+        coEvery { mockGetQuestionsUseCase(currentState.currentTopic.url, dataRepo) } returns Result.success(sampleQuestions)
         viewModel = QuizViewModel(mockGetQuestionsUseCase, mockCalculateStreakUseCase)
         advanceUntilIdle()
 
@@ -92,7 +91,7 @@ class QuizViewModelTest {
     @Test
     fun `selectOption should not update state when answer is already revealed`() = runTest {
         // Given
-        coEvery { mockGetQuestionsUseCase() } returns Result.success(sampleQuestions)
+        coEvery { mockGetQuestionsUseCase(currentState.currentTopic.url, dataRepo) } returns Result.success(sampleQuestions)
         viewModel = QuizViewModel(mockGetQuestionsUseCase, mockCalculateStreakUseCase)
         advanceUntilIdle()
 
@@ -110,7 +109,7 @@ class QuizViewModelTest {
     @Test
     fun `nextQuestion should move to next question correctly`() = runTest {
         // Given
-        coEvery { mockGetQuestionsUseCase() } returns Result.success(sampleQuestions)
+        coEvery { mockGetQuestionsUseCase(currentState.currentTopic.url, dataRepo) } returns Result.success(sampleQuestions)
         every { mockCalculateStreakUseCase.calculateCurrentStreak(any()) } returns 1
         every { mockCalculateStreakUseCase.calculateLongestStreak(any()) } returns 1
 
@@ -140,7 +139,7 @@ class QuizViewModelTest {
     @Test
     fun `nextQuestion should complete quiz when reaching last question`() = runTest {
         // Given
-        coEvery { mockGetQuestionsUseCase() } returns Result.success(sampleQuestions)
+        coEvery { mockGetQuestionsUseCase(currentState.currentTopic.url, dataRepo) } returns Result.success(sampleQuestions)
         viewModel = QuizViewModel(mockGetQuestionsUseCase, mockCalculateStreakUseCase)
         advanceUntilIdle()
 
@@ -159,7 +158,7 @@ class QuizViewModelTest {
     @Test
     fun `skipQuestion should mark question as skipped`() = runTest {
         // Given
-        coEvery { mockGetQuestionsUseCase() } returns Result.success(sampleQuestions)
+        coEvery { mockGetQuestionsUseCase(currentState.currentTopic.url, dataRepo) } returns Result.success(sampleQuestions)
         viewModel = QuizViewModel(mockGetQuestionsUseCase, mockCalculateStreakUseCase)
         advanceUntilIdle()
 
@@ -181,7 +180,7 @@ class QuizViewModelTest {
     @Test
     fun `restartQuiz should reset state and reload questions`() = runTest {
         // Given
-        coEvery { mockGetQuestionsUseCase() } returns Result.success(sampleQuestions)
+        coEvery { mockGetQuestionsUseCase(currentState.currentTopic.url, dataRepo) } returns Result.success(sampleQuestions)
         viewModel = QuizViewModel(mockGetQuestionsUseCase, mockCalculateStreakUseCase)
         advanceUntilIdle()
 
@@ -204,13 +203,13 @@ class QuizViewModelTest {
         assertThat(state.isQuizCompleted).isFalse()
         assertThat(state.questions).isEqualTo(sampleQuestions)
 
-        coVerify(exactly = 2) { mockGetQuestionsUseCase() }
+        coVerify(exactly = 2) { mockGetQuestionsUseCase(currentState.currentTopic.url, dataRepo) }
     }
 
     @Test
     fun `selectOption with correct answer should update streak correctly`() = runTest {
         // Given
-        coEvery { mockGetQuestionsUseCase() } returns Result.success(sampleQuestions)
+        coEvery { mockGetQuestionsUseCase(currentState.currentTopic.url, dataRepo) } returns Result.success(sampleQuestions)
         every { mockCalculateStreakUseCase.calculateCurrentStreak(any()) } returns 1
         every { mockCalculateStreakUseCase.calculateLongestStreak(any()) } returns 1
 
@@ -233,7 +232,7 @@ class QuizViewModelTest {
     @Test
     fun `selectOption with incorrect answer should still update streak`() = runTest {
         // Given
-        coEvery { mockGetQuestionsUseCase() } returns Result.success(sampleQuestions)
+        coEvery { mockGetQuestionsUseCase(currentState.currentTopic.url, dataRepo) } returns Result.success(sampleQuestions)
         every { mockCalculateStreakUseCase.calculateCurrentStreak(any()) } returns 0
         every { mockCalculateStreakUseCase.calculateLongestStreak(any()) } returns 0
 
@@ -259,7 +258,7 @@ class QuizViewModelTest {
     @Test
     fun `complete quiz flow should work correctly`() = runTest {
         // Given
-        coEvery { mockGetQuestionsUseCase() } returns Result.success(sampleQuestions)
+        coEvery { mockGetQuestionsUseCase(currentState.currentTopic.url, dataRepo) } returns Result.success(sampleQuestions)
         every { mockCalculateStreakUseCase.calculateCurrentStreak(any()) } returnsMany listOf(1, 2, 3)
         every { mockCalculateStreakUseCase.calculateLongestStreak(any()) } returnsMany listOf(1, 2, 3)
 
@@ -289,7 +288,7 @@ class QuizViewModelTest {
     @Test
     fun `mixed answers and skips should work correctly`() = runTest {
         // Given
-        coEvery { mockGetQuestionsUseCase() } returns Result.success(sampleQuestions)
+        coEvery { mockGetQuestionsUseCase(currentState.currentTopic.url, dataRepo) } returns Result.success(sampleQuestions)
         every { mockCalculateStreakUseCase.calculateCurrentStreak(any()) } returnsMany listOf(1, 0, 0)
         every { mockCalculateStreakUseCase.calculateLongestStreak(any()) } returnsMany listOf(1, 1, 1)
 

@@ -13,6 +13,7 @@ import com.harshvardhan.quizapp.utils.showToast
 import com.harshvardhan.quizapp.dataModels.QuizResult
 import com.harshvardhan.quizapp.ui.quizScreen.composables.question.QuestionCard
 import com.harshvardhan.quizapp.ui.quizScreen.composables.result.ResultsView
+import com.harshvardhan.quizapp.ui.quizSelection.composables.LoadingView
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -43,10 +44,6 @@ fun QuizScreen(
 
     Column(modifier) {
         when {
-            state.isLoading -> {
-                LoadingView()
-            }
-
             state.isQuizCompleted -> {
                 val result = QuizResult(
                     correctAnswers = state.answeredQuestions.count { it.isCorrect },

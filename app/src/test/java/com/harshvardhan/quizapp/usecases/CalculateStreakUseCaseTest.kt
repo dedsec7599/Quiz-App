@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.isEqualTo
 import com.harshvardhan.quizapp.dataModels.AnsweredQuestion
 import com.harshvardhan.quizapp.dataModels.Question
+import com.harshvardhan.quizapp.usecases.quizUseCase.CalculateStreakUseCase
 
 import org.junit.Before
 import org.junit.Test

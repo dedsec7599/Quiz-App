@@ -1,4 +1,4 @@
-package com.harshvardhan.quizapp.usecases
+package com.harshvardhan.quizapp.usecases.quizUseCase
 
 import com.harshvardhan.quizapp.dataModels.AnsweredQuestion
 

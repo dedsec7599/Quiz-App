@@ -7,39 +7,87 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.harshvardhan.quizapp.dataModels.Topic
+import com.harshvardhan.quizapp.screens.Screens
+import com.harshvardhan.quizapp.ui.quizScreen.QuizContract
 import com.harshvardhan.quizapp.ui.quizScreen.QuizViewModel
 import com.harshvardhan.quizapp.ui.quizScreen.composables.QuizScreen
+import com.harshvardhan.quizapp.ui.quizSelection.QuizSelectionContract.*
+import com.harshvardhan.quizapp.ui.quizSelection.QuizSelectionViewModel
+import com.harshvardhan.quizapp.ui.quizSelection.composables.QuizSelectionScreen
 import com.harshvardhan.quizapp.ui.theme.QuizAppTheme
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.compose.viewmodel.koinViewModel
-import kotlin.getValue
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val viewmodel: QuizViewModel by viewModel()
-
         setContent {
-            val state by viewmodel.state.collectAsStateWithLifecycle(minActiveState = Lifecycle.State.RESUMED)
-
+            val navController = rememberNavController()
             QuizAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) {
-                    QuizScreen(
-                        modifier = Modifier.padding(it),
-                        state = state,
-                        onEvent = viewmodel::handleEvent,
-                        onEffectSent = viewmodel.effect
-                    )
+                Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
+                    NavHost(
+                        navController = navController, startDestination = Screens.QuizSelection
+                    ) {
+                        composable<Screens.QuizSelection> {
+                            val viewModel: QuizSelectionViewModel = koinViewModel()
+                            val state by viewModel.state.collectAsStateWithLifecycle(
+                                minActiveState = Lifecycle.State.RESUMED
+                            )
+
+                            QuizSelectionScreen(modifier = Modifier.padding(paddingValues),
+                                state = state,
+                                onEvent = viewModel::handleEvent,
+                                onEffectSent = viewModel.effect,
+                                onNavigationRequested = {
+                                    when (it) {
+                                        is Effect.Navigation.NavigateToQuiz -> navController.navigate(
+                                            Screens.Quiz(
+                                                id = it.topic.id,
+                                                title = it.topic.title,
+                                                description = it.topic.description,
+                                                url = it.topic.url
+                                            )
+                                        )
+                                    }
+                                })
+                        }
+
+                        composable<Screens.Quiz> {
+                            val viewModel: QuizViewModel = koinViewModel()
+                            val state by viewModel.state.collectAsStateWithLifecycle(
+                                minActiveState = Lifecycle.State.RESUMED
+                            )
+
+                            val arguments = it.toRoute<Screens.Quiz>()
+
+                            val topic = Topic(
+                                id = arguments.id,
+                                title = arguments.title,
+                                description = arguments.description,
+                                url = arguments.url
+                            )
+
+                            viewModel.handleEvent(QuizContract.Event.FetchQuestions(topic))
+
+                            QuizScreen(
+                                modifier = Modifier.padding(paddingValues),
+                                state = state,
+                                onEvent = viewModel::handleEvent,
+                                onEffectSent = viewModel.effect
+                            )
+                        }
+                    }
+
                 }
             }
         }

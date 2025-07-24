@@ -2,6 +2,7 @@ package com.harshvardhan.quizapp.ui.quizScreen
 
 import com.harshvardhan.quizapp.dataModels.AnsweredQuestion
 import com.harshvardhan.quizapp.dataModels.Question
+import com.harshvardhan.quizapp.dataModels.Topic
 
 sealed class QuizContract {
     sealed class Event {
@@ -9,10 +10,16 @@ sealed class QuizContract {
         object SkipQuestion : Event()
         object NextQuestion : Event()
         object RestartQuiz : Event()
+        data class FetchQuestions(val topic: Topic): Event()
     }
 
     data class State(
-        val isLoading: Boolean = false,
+        val currentTopic: Topic = Topic(
+            id = "",
+            title = "",
+            description = "",
+            url = ""
+        ),
         val questions: List<Question> = emptyList(),
         val currentQuestionIndex: Int = 0,
         val selectedOptionIndex: Int? = null,

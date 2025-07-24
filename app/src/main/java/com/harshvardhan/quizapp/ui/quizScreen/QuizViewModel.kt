@@ -5,11 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.harshvardhan.quizapp.dataModels.AnsweredQuestion
 import com.harshvardhan.quizapp.ui.quizScreen.QuizContract.Effect
-import com.harshvardhan.quizapp.ui.quizScreen.QuizContract.State
 import com.harshvardhan.quizapp.ui.quizScreen.QuizContract.Event
-import com.harshvardhan.quizapp.usecases.CalculateStreakUseCase
-import com.harshvardhan.quizapp.usecases.GetQuestionsUseCase
-import kotlinx.coroutines.delay
+import com.harshvardhan.quizapp.ui.quizScreen.QuizContract.State
+import com.harshvardhan.quizapp.usecases.quizUseCase.CalculateStreakUseCase
+import com.harshvardhan.quizapp.usecases.quizUseCase.GetQuestionsUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -32,16 +31,19 @@ class QuizViewModel(
     val currentState
         get() = _state.value
 
-    init {
-        loadQuestions()
-    }
 
     fun handleEvent(event: Event) {
         when (event) {
+            is Event.FetchQuestions -> {
+                setState { copy(currentTopic = event.topic) }
+                loadQuestions(event.topic.url)
+            }
+
             Event.NextQuestion -> moveToNextQuestion(false)
             Event.RestartQuiz -> {
-                setState { State() }
-                loadQuestions()
+                val currentTopic = currentState.currentTopic
+                loadQuestions(currentTopic.url)
+                setState { State().copy(currentTopic = currentTopic) }
             }
 
             is Event.SelectOption -> selectOption(event.optionIndex)
@@ -49,11 +51,10 @@ class QuizViewModel(
         }
     }
 
-    private fun loadQuestions() {
-        setState { copy(isLoading = true) }
+    private fun loadQuestions(url: String) {
         viewModelScope.launch {
             try {
-                getQuestionsUseCase().fold(onSuccess = {
+                getQuestionsUseCase(url).fold(onSuccess = {
                     setState { copy(questions = it) }
                 }, onFailure = {
                     setEffect { Effect.ShowError }
@@ -62,9 +63,6 @@ class QuizViewModel(
             } catch (e: Exception) {
                 setEffect { Effect.ShowError }
                 Log.e(TAG, e.message ?: "")
-            } finally {
-                delay(1000)
-                setState { copy(isLoading = false) }
             }
         }
     }
@@ -86,7 +84,7 @@ class QuizViewModel(
         val isCorrect = selectedIndex == currentQuestion.correctOptionIndex
         val answeredQuestion = AnsweredQuestion(
             question = currentQuestion,
-            selectedOptionIndex = if(skipped) null else selectedIndex,
+            selectedOptionIndex = if (skipped) null else selectedIndex,
             isCorrect = isCorrect,
             isSkipped = skipped
         )
@@ -94,7 +92,8 @@ class QuizViewModel(
         val updatedAnsweredQuestions = currentState.answeredQuestions + answeredQuestion
         val newCurrentStreak =
             calculateStreakUseCase.calculateCurrentStreak(updatedAnsweredQuestions)
-        val newLongestStreak = calculateStreakUseCase.calculateLongestStreak(updatedAnsweredQuestions)
+        val newLongestStreak =
+            calculateStreakUseCase.calculateLongestStreak(updatedAnsweredQuestions)
 
         setState {
             copy(

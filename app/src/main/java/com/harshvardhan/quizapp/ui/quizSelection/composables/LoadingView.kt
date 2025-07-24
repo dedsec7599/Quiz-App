@@ -1,4 +1,4 @@
-package com.harshvardhan.quizapp.ui.quizScreen.composables
+package com.harshvardhan.quizapp.ui.quizSelection.composables
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
