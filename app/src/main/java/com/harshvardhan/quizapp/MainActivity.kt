@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
@@ -58,6 +59,8 @@ class MainActivity : ComponentActivity() {
                                                 url = it.topic.url
                                             )
                                         )
+
+                                        Effect.Navigation.OnBackPress -> navController.navigateUp()
                                     }
                                 })
                         }
@@ -77,13 +80,20 @@ class MainActivity : ComponentActivity() {
                                 url = arguments.url
                             )
 
-                            viewModel.handleEvent(QuizContract.Event.FetchQuestions(topic))
+                            LaunchedEffect(Unit) {
+                                viewModel.handleEvent(QuizContract.Event.FetchQuestions(topic))
+                            }
 
                             QuizScreen(
                                 modifier = Modifier.padding(paddingValues),
                                 state = state,
                                 onEvent = viewModel::handleEvent,
-                                onEffectSent = viewModel.effect
+                                onEffectSent = viewModel.effect,
+                                onNavigationRequested = {
+                                    when(it) {
+                                        QuizContract.Effect.Navigation.OnBackPress -> navController.navigateUp()
+                                    }
+                                }
                             )
                         }
                     }

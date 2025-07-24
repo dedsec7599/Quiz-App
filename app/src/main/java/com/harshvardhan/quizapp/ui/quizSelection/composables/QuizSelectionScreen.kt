@@ -1,5 +1,6 @@
 package com.harshvardhan.quizapp.ui.quizSelection.composables
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,7 +13,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun QuizSelectionScreen(
-    modifier: Modifier, state: State, onEvent: (Event) -> Unit, onEffectSent: Flow<Effect>, onNavigationRequested: (Effect.Navigation) -> Unit
+    modifier: Modifier,
+    state: State,
+    onEvent: (Event) -> Unit,
+    onEffectSent: Flow<Effect>,
+    onNavigationRequested: (Effect.Navigation) -> Unit
 ) {
 
     val context = LocalContext.current
@@ -39,6 +44,14 @@ fun QuizSelectionScreen(
         }
     }
 
+    LaunchedEffect(Unit) {
+        onEvent(Event.UpdateTopicStatus)
+    }
+
+    BackHandler {
+        onEvent(Event.OnBackPress)
+    }
+
     Column(modifier) {
         when {
             state.isLoading -> {
@@ -46,8 +59,7 @@ fun QuizSelectionScreen(
             }
 
             state.topics.isNotEmpty() -> QuizSelectionView(
-                state = state,
-                onEventSent = onEvent
+                state = state, onEventSent = onEvent
             )
         }
     }

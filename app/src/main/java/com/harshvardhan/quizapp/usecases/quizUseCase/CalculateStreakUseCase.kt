@@ -8,7 +8,7 @@ class CalculateStreakUseCase {
         var longestStreak = 0
 
         answeredQuestions.forEach { question ->
-            if (question.isCorrect && !question.isSkipped) {
+            if (question.correctAnswer == question.userAnswer && question.userAnswer.isNotEmpty()) {
                 currentStreak++
                 longestStreak = maxOf(longestStreak, currentStreak)
             } else {
@@ -25,7 +25,7 @@ class CalculateStreakUseCase {
         // Count from the end to get current streak
         for (i in answeredQuestions.indices.reversed()) {
             val question = answeredQuestions[i]
-            if (question.isCorrect && !question.isSkipped) {
+            if (question.correctAnswer == question.userAnswer && question.userAnswer.isNotEmpty()) {
                 currentStreak++
             } else {
                 break

@@ -47,9 +47,15 @@ fun QuizSelectionView(state: State, onEventSent: (Event) -> Unit) {
                     .padding(CustomSpacing.medium)
                     .fillMaxWidth()
                     .clickable {
-                        onEventSent(Event.OnTopicSelected(it))
+                        if (it.isFinished || state.hasApiFailed.not()) onEventSent(
+                            Event.OnTopicSelected(
+                                it
+                            )
+                        )
                     }, colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface
+                    containerColor = MaterialTheme.colorScheme.surface.copy(
+                        alpha = if (it.isFinished || state.hasApiFailed.not()) 1f else 0.4f
+                    )
                 ), elevation = CardDefaults.cardElevation(defaultElevation = CustomSpacing.xxSmall)
             ) {
                 Row(
@@ -64,7 +70,7 @@ fun QuizSelectionView(state: State, onEventSent: (Event) -> Unit) {
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Medium,
                     )
-                    if(it.isFinished) Icon(
+                    if (it.isFinished) Icon(
                         imageVector = Icons.Default.Check,
                         contentDescription = null,
                         tint = Color.Green

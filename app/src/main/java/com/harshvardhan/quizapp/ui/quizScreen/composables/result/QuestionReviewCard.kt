@@ -40,10 +40,13 @@ import com.harshvardhan.quizapp.utils.accessibilityId
 
 @Composable
 fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
+    val isSkipped = answeredQuestion.userAnswer.isBlank()
+    val isCorrect = answeredQuestion.userAnswer == answeredQuestion.correctAnswer
+
     val backgroundColor by animateColorAsState(
         targetValue = when {
-            answeredQuestion.isSkipped -> MaterialTheme.colorScheme.surface
-            answeredQuestion.isCorrect -> CorrectGreen.copy(alpha = 0.1f)
+            isSkipped -> MaterialTheme.colorScheme.surface
+            isCorrect -> CorrectGreen.copy(alpha = 0.1f)
             else -> IncorrectRed.copy(alpha = 0.1f)
         },
         animationSpec = tween(300),
@@ -72,7 +75,7 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
             VerticalSpacer(CustomSpacing.small)
 
             // User answer
-            if (answeredQuestion.isSkipped) {
+            if (isSkipped) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -111,11 +114,11 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                         modifier = Modifier
                             .size(CustomSpacing.xLarge)
                             .background(
-                                color = if (answeredQuestion.isCorrect) CorrectGreen else IncorrectRed,
+                                color = if (isCorrect) CorrectGreen else IncorrectRed,
                                 shape = CircleShape
                             )
                             .accessibilityId(
-                                if (answeredQuestion.isCorrect)
+                                if (isCorrect)
                                     ContentDescription.CORRECT_ICON
                                 else
                                     ContentDescription.INCORRECT_ICON
@@ -123,7 +126,7 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            imageVector = if (answeredQuestion.isCorrect) Icons.Default.Check else Icons.Default.Close,
+                            imageVector = if (isCorrect) Icons.Default.Check else Icons.Default.Close,
                             contentDescription = null, // already described by ID
                             tint = Color.White,
                             modifier = Modifier.size(CustomSpacing.small)
@@ -135,7 +138,7 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                     Text(
                         text = stringResource(
                             R.string.your_answer,
-                            answeredQuestion.question.options[answeredQuestion.selectedOptionIndex!!]
+                            answeredQuestion.userAnswer
                         ),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface,
@@ -145,7 +148,7 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
             }
 
             // Correct answer (if incorrect)
-            if (!answeredQuestion.isCorrect) {
+            if (isCorrect.not()) {
                 VerticalSpacer(CustomSpacing.xSmall)
 
                 Row(
@@ -174,7 +177,7 @@ fun QuestionReviewCard(answeredQuestion: AnsweredQuestion) {
                     Text(
                         text = stringResource(
                             R.string.correct_answer,
-                            answeredQuestion.question.options[answeredQuestion.question.correctOptionIndex]
+                            answeredQuestion.correctAnswer
                         ),
                         style = MaterialTheme.typography.bodyMedium,
                         color = CorrectGreen,

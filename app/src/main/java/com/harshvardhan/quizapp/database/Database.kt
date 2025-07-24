@@ -12,7 +12,7 @@ import com.harshvardhan.quizapp.database.topics.TopicEntity
 @Database(
     entities = [TopicEntity::class, QuestionEntity::class],
     version = 1,
-    exportSchema = false
+    exportSchema = false,
 )
 
 abstract class QuizDatabase : RoomDatabase() {

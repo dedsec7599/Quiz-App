@@ -26,27 +26,25 @@ class QuizDBRepoImpl(database: QuizDatabase) : QuizDBRepo {
         // Mark topic as completed
         topicDao.markTopicCompleted(topicId)
 
-        // Save questions with user answers to database
+        // Delete old questions for this topic to avoid stale data
+        questionDao.deleteQuestionsByTopic(topicId)
+
+        // Convert and insert fresh questions
         val questionEntities = questions.map { question ->
-            val userAnswer = userAnswers[question.id] // Get user's answer for this question
+            val userAnswer = userAnswers[question.id]
             QuestionEntity(
                 id = question.id,
                 topicId = topicId,
                 question = question.question,
-                correctAnswer = question.options[question.correctOptionIndex], // Store actual correct answer
-                userAnswer = userAnswer // Store user's answer (can be null if not answered)
+                correctAnswer = question.options[question.correctOptionIndex],
+                userAnswer = userAnswer
             )
         }
         questionDao.insertQuestions(questionEntities)
-    }
+    } 
 
     // Get all questions for a topic (with user answers)
     override suspend fun getAllQuestionsForTopic(topicId: String): List<QuestionEntity> {
         return questionDao.getAllQuestionsByTopic(topicId)
-    }
-
-    // Submit user answer
-    override suspend fun submitAnswer(questionId: Int, userAnswer: String) {
-        questionDao.updateUserAnswer(questionId, userAnswer)
     }
 }

@@ -42,9 +42,8 @@ interface TopicDao {
     suspend fun deleteTopicsNotInList(topicIds: List<String>)
 
     @Transaction
-    suspend fun syncTopics(newTopics: List<Topic>) {
+    suspend fun syncTopics(newTopics: List<Topic>, deleteMissing: Boolean = false) {
         val topicEntities = newTopics.map { topic ->
-            // Preserve existing completion status if topic already exists
             val existing = getTopicById(topic.id)
             TopicEntity(
                 id = topic.id,
@@ -56,6 +55,9 @@ interface TopicDao {
         }
 
         insertTopics(topicEntities)
-        deleteTopicsNotInList(newTopics.map { it.id })
+
+//        if (deleteMissing) {
+//            deleteTopicsNotInList(newTopics.map { it.id })
+//        }
     }
 }

@@ -10,7 +10,6 @@ data class QuizResult(
 
 data class AnsweredQuestion(
     val question: Question,
-    val selectedOptionIndex: Int?,
-    val isCorrect: Boolean,
-    val isSkipped: Boolean
+    val correctAnswer: String,
+    val userAnswer: String,
 )

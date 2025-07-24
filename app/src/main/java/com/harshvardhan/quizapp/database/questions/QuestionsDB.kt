@@ -7,12 +7,12 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
-import androidx.room.PrimaryKey
 import androidx.room.Query
 import com.harshvardhan.quizapp.database.topics.TopicEntity
 
 @Entity(
     tableName = "questions",
+    primaryKeys = ["id", "topic_id"], // Declare composite PK here
     foreignKeys = [
         ForeignKey(
             entity = TopicEntity::class,
@@ -24,7 +24,7 @@ import com.harshvardhan.quizapp.database.topics.TopicEntity
     indices = [Index(value = ["topic_id"])]
 )
 data class QuestionEntity(
-    @PrimaryKey val id: Int,
+    val id: Int,
     @ColumnInfo(name = "topic_id") val topicId: String,
     val question: String,
     @ColumnInfo(name = "correct_answer") val correctAnswer: String,

@@ -11,6 +11,7 @@ sealed class QuizContract {
         object NextQuestion : Event()
         object RestartQuiz : Event()
         data class FetchQuestions(val topic: Topic): Event()
+        object OnBackPress: Event()
     }
 
     data class State(
@@ -27,10 +28,14 @@ sealed class QuizContract {
         val answeredQuestions: List<AnsweredQuestion> = emptyList(),
         val currentStreak: Int = 0,
         val longestStreak: Int = 0,
-        val isQuizCompleted: Boolean = false,
+        val isQuizCompleted: Boolean = false
     )
 
     sealed class Effect {
+        sealed class Navigation: Effect() {
+            data object OnBackPress: Navigation()
+        }
+
         data object ShowError : Effect()
         data class ShowToast(val message: String) : Effect()
     }

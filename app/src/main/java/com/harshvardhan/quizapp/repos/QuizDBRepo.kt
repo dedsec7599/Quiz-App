@@ -14,5 +14,4 @@ interface QuizDBRepo {
         userAnswers: Map<Int, String> // questionId to userAnswer mapping
     )
     suspend fun getAllQuestionsForTopic(topicId: String): List<QuestionEntity>
-    suspend fun submitAnswer(questionId: Int, userAnswer: String)
 }

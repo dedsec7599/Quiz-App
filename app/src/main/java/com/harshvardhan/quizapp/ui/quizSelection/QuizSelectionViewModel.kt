@@ -33,12 +33,29 @@ class QuizSelectionViewModel(
         fetchTopics()
     }
 
+    fun handleEvent(event: Event) {
+        when(event) {
+            is Event.OnTopicSelected -> {
+                setEffect { NavigateToQuiz(event.topic) }
+            }
+
+            Event.UpdateTopicStatus -> {
+                viewModelScope.launch {
+                    loadTopicsFromDb()
+                }
+            }
+
+            Event.OnBackPress -> setEffect { Effect.Navigation.OnBackPress }
+        }
+    }
+
     private fun fetchTopics() {
         setState { copy(isLoading = true) }
         viewModelScope.launch {
             try {
                 fetchNetworkTopics()
             } catch (e: Exception) {
+                setState { copy(hasApiFailed = true) }
                 Log.e(TAG, "Exception in fetchTopics: ${e.message ?: ""}")
                 viewModelScope.launch {
                     loadTopicsFromDb()
@@ -63,14 +80,13 @@ class QuizSelectionViewModel(
     }
 
     private suspend fun syncAndLoadTopicsFromDb(networkTopics: List<Topic>) {
-        syncDbUseCase.invoke(networkTopics).fold(
+        syncDbUseCase(networkTopics).fold(
             onSuccess = {
                 loadTopicsFromDb()
             },
             onFailure = { syncError ->
                 Log.e(TAG, "Error syncing topics to DB: ${syncError.message ?: syncError}")
                 setEffect { Effect.ShowError }
-                loadTopicsFromDb()
             }
         )
     }
@@ -87,14 +103,6 @@ class QuizSelectionViewModel(
             )
         }
         setState { copy(topics = mappedTopics) }
-    }
-
-    fun handleEvent(event: Event) {
-        when(event) {
-            is Event.OnTopicSelected -> {
-                setEffect { NavigateToQuiz(event.topic) }
-            }
-        }
     }
 
     private fun setState(update: State.() -> State) {
