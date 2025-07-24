@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
-    id ("kotlin-kapt")
+    id("kotlin-kapt")
 }
 
 android {
@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
@@ -74,16 +75,15 @@ dependencies {
     // For serialization
     implementation(libs.kotlinx.serialization.json)
 
-    implementation(libs.androidx.navigation.compose)
-
+    // For Network
     implementation(libs.okhttp)
     implementation(libs.retrofit)
     implementation (libs.converter.gson)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
+    // For DB
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
-    kapt ("androidx.room:room-compiler:2.7.2")
+    kapt(libs.androidx.room.compiler)
 
 }
