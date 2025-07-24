@@ -38,7 +38,7 @@ interface TopicDao {
     @Query("UPDATE topics SET is_completed = 1, best_streak = :bestStreak WHERE id = :topicId")
     suspend fun markTopicCompleted(topicId: String, bestStreak: Int)
 
-    // Delete topics that are not in the provided list (for sync)
+    // Delete topics that are not in the provided list from api
     @Query("DELETE FROM topics WHERE id NOT IN (:topicIds)")
     suspend fun deleteTopicsNotInList(topicIds: List<String>)
 
@@ -57,8 +57,6 @@ interface TopicDao {
 
         insertTopics(topicEntities)
 
-//        if (deleteMissing) {
-//            deleteTopicsNotInList(newTopics.map { it.id })
-//        }
+        deleteTopicsNotInList(newTopics.map { it.id })
     }
 }

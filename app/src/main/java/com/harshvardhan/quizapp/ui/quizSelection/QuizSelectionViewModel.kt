@@ -46,7 +46,6 @@ class QuizSelectionViewModel(
             }
 
             is Event.OnReviewClicked -> {
-                val bestStreak = state.value.topics
                 setEffect { NavigateToQuiz(event.topic, true) }
             }
 

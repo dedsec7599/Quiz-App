@@ -75,7 +75,7 @@ fun QuizSelectionView(state: State, onEventSent: (Event) -> Unit) {
                                 .padding(start = CustomSpacing.medium),
                             shape = RoundedCornerShape(CustomSpacing.small),
                             colors = CardDefaults.cardColors(containerColor = CorrectGreen),
-                            elevation = CardDefaults.cardElevation(defaultElevation = CustomSpacing.xSmall) // add elevation here
+                            elevation = CardDefaults.cardElevation(defaultElevation = CustomSpacing.xSmall)
                         ) {
                             Text(
                                 modifier = Modifier.padding(
@@ -89,7 +89,6 @@ fun QuizSelectionView(state: State, onEventSent: (Event) -> Unit) {
                         }
                     }
                 }
-
 
                 Text(
                     modifier = Modifier.padding(CustomSpacing.medium),

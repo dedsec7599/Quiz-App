@@ -3,6 +3,8 @@ package com.harshvardhan.quizapp.ui.quizScreen.composables
 import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -22,6 +24,7 @@ fun QuizScreen(
     modifier: Modifier, state: State, onEvent: (Event) -> Unit, onEffectSent: Flow<Effect>, onNavigationRequested: (Effect.Navigation) -> Unit
 ) {
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(Unit) {
         onEffectSent.collect { effect ->
@@ -49,7 +52,7 @@ fun QuizScreen(
         onEvent(Event.OnBackPress)
     }
 
-    Column(modifier) {
+    Column(modifier.verticalScroll(scrollState)) {
         when {
             state.isQuizCompleted -> {
                 val result = QuizResult(

@@ -4,8 +4,15 @@ import kotlinx.serialization.Serializable
 
 sealed class Screens {
     @Serializable
-    data object QuizSelection: Screens()
+    data object QuizSelection : Screens()
 
     @Serializable
-    data class Quiz(val id: String, val title: String, val description: String, val url: String, val showReview: Boolean, val bestStreak: Int): Screens()
+    data class Quiz(
+        val id: String,
+        val title: String,
+        val description: String,
+        val url: String,
+        val showReview: Boolean,
+        val bestStreak: Int
+    ) : Screens()
 }

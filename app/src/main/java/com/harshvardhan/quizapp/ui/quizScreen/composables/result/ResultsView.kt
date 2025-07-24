@@ -38,9 +38,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.harshvardhan.quizapp.R
 import com.harshvardhan.quizapp.dataModels.QuizResult
 import com.harshvardhan.quizapp.ui.quizScreen.QuizContract.*
@@ -55,6 +57,7 @@ fun ResultsView(
     result: QuizResult, showReview: Boolean, onEventSent: (Event) -> Unit
 ) {
     var isVisible by remember { mutableStateOf(false) }
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 
     LaunchedEffect(Unit) {
         delay(300)
@@ -71,6 +74,7 @@ fun ResultsView(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
+            .height(screenHeight)
             .padding(CustomSpacing.medium)
             .accessibilityId(ContentDescription.RESULTS_VIEW),
         verticalArrangement = Arrangement.spacedBy(CustomSpacing.medium),

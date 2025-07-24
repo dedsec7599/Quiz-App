@@ -44,7 +44,7 @@ class QuizDBRepoImpl(database: QuizDatabase) : QuizDBRepo {
         questionDao.insertQuestions(questionEntities)
     }
 
-    // Get all questions for a topic (with user answers)
+    // Get all questions for a topic
     override suspend fun getAllQuestionsForTopic(topicId: String): List<QuestionEntity> {
         return questionDao.getAllQuestionsByTopic(topicId)
     }
