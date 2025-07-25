@@ -16,7 +16,7 @@
     <string name="question_review">Question Review</string>
     <string name="finish">Finish</string>
     <string name="quiz_app">Quiz App</string>
-    <string name="loading_questions">Loading questions…</string>
+    <string name="loading_questions">Loading topics…</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="quiz_topics">Quiz topics</string>
     <string name="review">Review</string>

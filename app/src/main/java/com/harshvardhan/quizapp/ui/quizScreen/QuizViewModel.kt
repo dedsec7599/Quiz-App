@@ -89,7 +89,6 @@ class QuizViewModel(
 
             try {
                 saveQuizResultUseCase(topicId, networkQuestions, userAnswers, bestStreak)
-                setEffect { Effect.ShowToast("Quiz saved successfully!") }
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to save quiz data: ${e.message}")
                 setEffect { Effect.ShowError }
