@@ -40,9 +40,7 @@ class QuizSelectionViewModel(
             }
 
             Event.UpdateTopicStatus -> {
-                viewModelScope.launch {
-                    loadTopicsFromDb()
-                }
+                loadTopicsFromDb()
             }
 
             is Event.OnReviewClicked -> {
@@ -61,26 +59,26 @@ class QuizSelectionViewModel(
             } catch (e: Exception) {
                 setState { copy(hasApiFailed = true) }
                 Log.e(TAG, "Exception in fetchTopics: ${e.message ?: ""}")
-                viewModelScope.launch {
-                    loadTopicsFromDb()
-                }
+                loadTopicsFromDb()
             } finally {
                 setState { copy(isLoading = false) }
             }
         }
     }
 
-    private suspend fun fetchNetworkTopics() {
-        getTopicsUseCase.invoke().fold(
-            onSuccess = { networkTopics ->
-                syncAndLoadTopicsFromDb(networkTopics)
-            },
-            onFailure = { networkError ->
-                Log.e(TAG, "Network fetch failed: ${networkError.message ?: ""}")
-                setEffect { Effect.ShowError }
-                loadTopicsFromDb()
-            }
-        )
+    private fun fetchNetworkTopics() {
+        viewModelScope.launch {
+            getTopicsUseCase.invoke().fold(
+                onSuccess = { networkTopics ->
+                    syncAndLoadTopicsFromDb(networkTopics)
+                },
+                onFailure = { networkError ->
+                    Log.e(TAG, "Network fetch failed: ${networkError.message ?: ""}")
+                    setEffect { Effect.ShowError }
+                    loadTopicsFromDb()
+                }
+            )
+        }
     }
 
     private suspend fun syncAndLoadTopicsFromDb(networkTopics: List<Topic>) {
@@ -95,19 +93,21 @@ class QuizSelectionViewModel(
         )
     }
 
-    private suspend fun loadTopicsFromDb() {
-        val dbTopics = fetchTopicsFromDbUseCase.invoke()
-        val mappedTopics = dbTopics.map { entity ->
-            Topic(
-                id = entity.id,
-                title = entity.title,
-                description = entity.description,
-                url = entity.url,
-                isFinished = entity.isCompleted,
-                bestStreak = entity.bestStreak
-            )
+    private fun loadTopicsFromDb() {
+        viewModelScope.launch {
+            val dbTopics = fetchTopicsFromDbUseCase.invoke()
+            val mappedTopics = dbTopics.map { entity ->
+                Topic(
+                    id = entity.id,
+                    title = entity.title,
+                    description = entity.description,
+                    url = entity.url,
+                    isFinished = entity.isCompleted,
+                    bestStreak = entity.bestStreak
+                )
+            }
+            setState { copy(topics = mappedTopics) }
         }
-        setState { copy(topics = mappedTopics) }
     }
 
     private fun setState(update: State.() -> State) {
